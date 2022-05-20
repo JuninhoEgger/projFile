@@ -1,29 +1,43 @@
 package main;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class Main {
     public static void main(String[] args) {
 
-        File file = new File("C:\\temp\\in.txt");
-        Scanner leia = null;
+        String path = "C:\\temp\\in.txt";
+        FileReader fr = null;
+        BufferedReader br = null;
 
         try {
-            leia = new Scanner(file);
-            StringBuilder resposta = new StringBuilder();
-            while (leia.hasNextLine()) {
-                resposta.append(leia.nextLine() + "\n");
+            fr = new FileReader(path);
+            br = new BufferedReader(fr);
+
+            String line = br.readLine();
+            StringBuilder response = new StringBuilder();
+
+            while (line != null) {
+                response.append(line).append("\n");
+                line = br.readLine();
             }
-            showMessageDialog(null, resposta);
+
+            showMessageDialog(null, response);
         } catch (IOException e) {
             showMessageDialog(null, "ERROR: " + e.getMessage());
         } finally {
-            if (leia != null) {
-                leia.close();
+            try {
+                if (br != null) {
+                    br.close();
+                }
+                if (fr != null) {
+                    fr.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
