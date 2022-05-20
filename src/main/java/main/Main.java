@@ -1,26 +1,40 @@
 package main;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.File;
 
+import static javax.swing.JOptionPane.showInputDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class Main {
     public static void main(String[] args) {
 
-        String[] lines = new String[]{"Good morning", "Good afternoon", "Good night"};
-        String path = "C:\\temp\\out.txt";
+        String strPath;
+        strPath = showInputDialog("ENTER A FOLDER PATH: ");
+        File path = new File(strPath);
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))) {
-            for (String line : lines) {
-                bw.write(line);
-                bw.newLine();
-            }
-            showMessageDialog(null, "DEU TUDO CERTO!");
-        } catch (IOException e) {
-            e.printStackTrace();
+        File[] folders = path.listFiles(File::isDirectory);
+        File[] files = path.listFiles(File::isFile);
+
+        StringBuilder responseFolders = new StringBuilder();
+        StringBuilder responseFiles = new StringBuilder();
+
+        assert folders != null;
+        for (File folder : folders) {
+            responseFolders.append(folder).append("\n");
         }
+
+        assert files != null;
+        for (File file : files) {
+            responseFiles.append(file).append("\n");
+        }
+
+        showMessageDialog(
+                null,
+                "FOLDERS\n" + responseFolders + "\n" +
+                        "FILES\n" + responseFiles);
+
+        boolean success = new File(strPath + "\\subdir").mkdir();
+        showMessageDialog(null, "DIRECTORY CREATED SUCCESSFULLY: " + success);
 
     }
 }
